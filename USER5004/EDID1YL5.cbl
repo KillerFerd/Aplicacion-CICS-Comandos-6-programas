@@ -38,6 +38,8 @@
 
        01 WKS-WORK-FIELDS.
            02 WKS-PROGRAM-XCTL          PIC X(08).
+           02 WKS-END-MSG               PIC X(14)
+           VALUE 'MUCHAS GRACIAS'.
 
        01 WKS-EDITED-FIELDS.
            02 WKS-DATE-SIS.
@@ -50,8 +52,6 @@
                03 WKS-TIME-MM           PIC 99.
                03 FILLER                PIC X VALUE ":".
                03 WKS-TIME-SS           PIC 99.
-           02 WKS-END-MSG               PIC X(14)
-              VALUE 'MUCHAS GRACIAS'.
 
        LINKAGE SECTION.
        01 DFHCOMMAREA                   PIC X(03).
