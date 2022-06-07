@@ -30,6 +30,7 @@
            02 WKS-PROGRAM-4             PIC X(08) VALUE "EDID1ALI".
            02 WKS-PROGRAM-5             PIC X(08) VALUE "EDID1MLI".
            02 WKS-PROGRAM-6             PIC X(08) VALUE "EDID1ELI".
+           02 WKS-PROGRAM-7             PIC X(08) VALUE "EDID1IL5".
            02 WKS-COMMAREA              PIC X(03) VALUE "123".
 
        01 WKS-FLAGS.
@@ -77,8 +78,9 @@
                WHEN 2     PERFORM 120-OPTION-2
                WHEN 3     PERFORM 130-OPTION-3
                WHEN 4     PERFORM 140-OPTION-4
-               WHEN 9     PERFORM 150-OPTION-9
-               WHEN OTHER PERFORM 160-OPTION-OTHER
+               WHEN 5     PERFORM 150-OPTION-5
+               WHEN 9     PERFORM 160-OPTION-9
+               WHEN OTHER PERFORM 170-OPTION-OTHER
            END-EVALUATE
            PERFORM 802-EXEC-CICS-SEND-DATA
            PERFORM 803-EXEC-CICS-RETURN.
@@ -103,12 +105,17 @@
            MOVE WKS-PROGRAM-6 TO WKS-PROGRAM-XCTL
            PERFORM 805-EXEC-CICS-XCTL.
 
+      *--> OPCION 4 >> MENU DE ELIMINACION
+       150-OPTION-5.
+           MOVE WKS-PROGRAM-7 TO WKS-PROGRAM-XCTL
+           PERFORM 805-EXEC-CICS-XCTL.
+
       *--> OPCION 9 >> SALIR
-       150-OPTION-9.
+       160-OPTION-9.
            PERFORM 999-END-PROGRAM.
 
       *--> OPCION OTHER
-       160-OPTION-OTHER.
+       170-OPTION-OTHER.
            SET WKS-MSG-INVALIDOP TO TRUE.
 
       *--> ACCION PARA SALIR DEL PROGRAMA
