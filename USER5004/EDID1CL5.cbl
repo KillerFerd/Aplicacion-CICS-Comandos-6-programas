@@ -50,13 +50,18 @@
        01 WKS-PROGRAM-SPECS.
            02 WKS-PROGRAM-NAME          PIC X(08) VALUE "EDID1CL5".
            02 WKS-PROGRAM-2             PIC X(08) VALUE "EDID1QLI".
+           02 WKS-PROGRAM-8             PIC X(08) VALUE "EDID1CLS".
            02 WKS-COMMAREA.
                03 WKS-COM-LAST-POS      PIC 9(08).
                03 WKS-COM-FIRST-POS     PIC 9(08).
-               03 WKS-COM-CO-CLIENTE    PIC X(08) OCCURS 13.
+               03 WKS-COM-CO-CLIENTE    PIC X(08) OCCURS 14.
                03 WKS-COM-OPTION        PIC X(01) OCCURS 13.
                03 WKS-COM-MODE          PIC 9(01).
                03 WKS-COM-RETURN        PIC 9(01).
+               03 WKS-COM-RETURNPROG    PIC 9(01).
+               03 WKS-COM-LAST-POS-A    PIC X(40).
+               03 WKS-COM-FIRST-POS-A   PIC X(40).
+
 
        01 WKS-EDITED-FIELDS.
            02 WKS-DATE-SIS.
@@ -72,7 +77,7 @@
            02 WKS-DATE-FORMAT           PIC 99/99/9999.
 
        LINKAGE SECTION.
-       01 DFHCOMMAREA                   PIC X(135).
+       01 DFHCOMMAREA                   PIC X(250).
 
        PROCEDURE DIVISION.
        000-MAIN-PROCESS.
@@ -87,6 +92,7 @@
                 WHEN EIBCALEN = 0
                     PERFORM 100-ACCION-DEFAULT
                 WHEN EIBTRNID = 'EDQI'
+                WHEN EIBTRNID = 'EDCS'
                     PERFORM 100-ACCION-DEFAULT
                 WHEN EIBAID = DFHPF10
                     PERFORM 200-ACCION-PF10
@@ -112,6 +118,7 @@
                 ADD 1 TO WKS-INDEX
            END-PERFORM
            MOVE ZEROS TO WKS-COM-MODE
+
            SET WKS-MSG-UNKERROR TO TRUE.
 
        120-PROCESS-MATCH.
@@ -122,7 +129,7 @@
            IF WKS-EDM4CL-NOTOPEN
                 SET WKS-MSG-NOTOPEN TO TRUE
            ELSE IF WKS-EDM4CL-NOTFND
-                SET WKS-MSG-UNKERROR TO TRUE
+               SET WKS-MSG-UNKERROR TO TRUE
            ELSE
                 PERFORM 130-PROCESS-DATA
            END-IF
@@ -144,7 +151,12 @@
            IF WKS-COM-MODE = 1
                 PERFORM 110-PROCESS-QUEARY
            END-IF
-           PERFORM 805-EXEC-CICS-XCTL-PROGRAM-2
+           IF WKS-COM-RETURNPROG = 1
+                PERFORM 805-EXEC-CICS-XCTL-PROGRAM-2
+           END-IF
+           IF WKS-COM-RETURNPROG = 2
+                PERFORM 806-EXEC-CICS-XCTL-PROGRAM-8
+           END-IF
            PERFORM 999-END-PROGRAM.
 
       *-->ACCION QUE DESPLIEGA MENSAJE DE COMANDO NO HABILITADO
@@ -159,6 +171,7 @@
                 MAP('EDCL5')
                 MAPSET('EDCL5')
                 ERASE
+                DEFAULT
            END-EXEC.
 
        802-EXEC-CICS-SEND-DATA.
@@ -191,6 +204,12 @@
                COMMAREA(WKS-COMMAREA)
            END-EXEC.
 
+       806-EXEC-CICS-XCTL-PROGRAM-8.
+           EXEC CICS XCTL
+               PROGRAM(WKS-PROGRAM-8)
+               COMMAREA(WKS-COMMAREA)
+           END-EXEC.
+
        899-EVALUATE-DFHRESP.
            EVALUATE EIBRESP
                 WHEN DFHRESP(NOTOPEN) SET WKS-EDM4CL-NOTOPEN TO TRUE
@@ -204,7 +223,7 @@
                 MOVE "COMANDO NO ACTIVO"
                 TO EDCL5-OUTPUT-MSGO
            ELSE IF WKS-MSG-UNKERROR
-                MOVE "ERROR DESCONOCIDO"
+                MOVE "ERROR DESCONOCIDO1"
                 TO EDCL5-OUTPUT-MSGO
            ELSE IF WKS-MSG-NOTOPEN
                 MOVE "ARCHIVO CERRADO"

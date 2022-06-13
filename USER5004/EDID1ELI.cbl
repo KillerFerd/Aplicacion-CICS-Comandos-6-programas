@@ -1,18 +1,18 @@
       ******************************************************************
-      * FECHA       : HOLA QUE HACE                                    *
+      * FECHA       : 03/06/2022                                       *
       * PROGRAMADOR : JOSUE DONIS                                      *
       * APLICACION  : SEMILLERO                                        *
       * PROGRAMA    : EDID1ELI                                         *
       * TIPO        : LINEA                                            *
-      * DESCRIPCION : MENU DE ADICION                                  *
-      * ARCHIVOS    : MOMAES, CFCNAT, MOTGEN, CFTGEN                   *
-      * ACCION (ES) : C=CONSULTAR                                      *
-      * PROGRAMA(S) :                                                  *
-      * CANAL       :                                                  *
-      * INSTALADO   :                                                  *
+      * DESCRIPCION : MENU DE ELIMINACION PARA MAESTRO DE CLIENTES     *
+      * ARCHIVOS    : EDM4CL                                           *
+      * ACCION (ES) : A=ACTUALIZA                                      *
+      * PROGRAMA(S) : XTCL                                             *
+      * CANAL       : ADMINISTRATIVA                                   *
+      * INSTALADO   : 03/06/2022                                       *
       * BPM/RATIONAL:                                                  *
-      * NOMBRE      :                                                  *
-      * DESCRIPCION :                                                  *
+      * NOMBRE      : EDGAR MARTINEZ - INSTRUCOR                       *
+      * DESCRIPCION : USER5004                                         *
       ******************************************************************
        ID DIVISION.
        PROGRAM-ID. EDID1ELI.
@@ -423,13 +423,13 @@
                 MOVE "NO SE ENCONTRO"
                 TO EDELI-OUTPUT-MSGO
            ELSE IF WKS-MSG-FOUND
-                MOVE "BUSQUEDA EXITOSA"
+                MOVE "UTILICE 'F2' PARA ELIMINAR O 'F3' PARA RESTAURAR"
                 TO EDELI-OUTPUT-MSGO
            ELSE IF WKS-MSG-CELIMINATED
-                MOVE "CONFIRME LA ELIMINACION"
+                MOVE "'F2' PARA CONFIRMAR O CANCELAR LA ELIMINACION"
                 TO EDELI-OUTPUT-MSGO
            ELSE IF WKS-MSG-CRESTORE
-                MOVE "CONFIRME LA RESTAURACION"
+                MOVE "'F3' PARA CONFIRMAR O CANCELAR LA RESTAURACION"
                 TO EDELI-OUTPUT-MSGO
            ELSE IF WKS-MSG-CANCELED
                 MOVE "PROCESO CANCELADO"
